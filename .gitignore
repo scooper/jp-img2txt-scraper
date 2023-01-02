@@ -58,3 +58,5 @@ CATKIN_IGNORE
 
 # python
 __pycache__/
+
+upload/*
