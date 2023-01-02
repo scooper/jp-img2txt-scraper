@@ -7,6 +7,14 @@ def init_pages(app):
     def index():
         return render_template("pages/index.html", title="Home")
 
+    @app.route("/images")
+    def images():
+        return render_template("pages/images.html", title="Images")
+
+    @app.route("/kanji")
+    def kanji():
+        return render_template("pages/kanji.html", title="Kanji")
+
     @app.route("/createdb")
     def create_db():
         db.create_all()
