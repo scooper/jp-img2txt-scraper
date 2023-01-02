@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> {{ title }} </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}"></link>
+    </head>
+    <body>
+        <h1>{{title}}</h1>
+
+        {% block content %}{% endblock %}
+    </body>
+    <script src="{{ url_for('static', filename='site.js') }}"></script>
+</html>

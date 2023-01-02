@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'cam = img2txt.camera_data:main',
+            'cam_data = img2txt.camera_data:main',
+            'image_process = img2txt.image_process:main',
         ],
     },
 )

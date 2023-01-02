@@ -4,10 +4,10 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-class ImagePublisher(Node):
+class CameraData(Node):
     def __init__(self):
-        super().__init__('image_publisher')
-        self.publisher_ = self.create_publisher(Image, 'image', 10)
+        super().__init__('cam_data')
+        self.publisher_ = self.create_publisher(Image, 'cam_data', 10)
         timer_period = 1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.cap = cv2.VideoCapture(0)
@@ -22,11 +22,11 @@ class ImagePublisher(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    image_publisher = ImagePublisher()
-    rclpy.spin(image_publisher)
+    cam_data = CameraData()
+    rclpy.spin(cam_data)
 
     # destroy
-    image_publisher.destroy_node()
+    cam_data.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
