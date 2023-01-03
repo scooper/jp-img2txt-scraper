@@ -23,7 +23,7 @@ class ImageSender(Node):
             self.listener_callback,
             50)
         self.bridge = CvBridge()
-        self.timer = self.create_rate(0.5)
+        self._loop_rate = self.create_rate(2, self.get_clock())
     
     def listener_callback(self, data):
         cv_image = self.bridge.imgmsg_to_cv2(data.image)
@@ -34,16 +34,21 @@ class ImageSender(Node):
         ocr_txt = data.ocr_txt
         characters = re.findall('(' + kanji + '|' + radicals + ')', data.ocr_txt)
 
-        file_to_send = {"file":(image_id + '.jpg', image_file)}
-        _ = requests.post(URI + "upload-image", files=file_to_send)
-        _ = requests.put(URI + 'api/image', {""})
 
-        for c in characters:
-            _ = requests.put(URI + 'api/character', {"image_id": image_id, "character": c})
-            self.timer.sleep()
-            
+        if characters != '':
+            file_to_send = {"file":(image_id + '.jpg', image_file)}
 
+            img_response = requests.post(URI + "upload-image", files=file_to_send)
+            self.get_logger().info("Sending Image: " + str(img_response.status_code))
+            img_db_response = requests.put(URI + 'api/image', json={"image_id": image_id, "ocr_txt": ocr_txt})
+            self.get_logger().info("Adding image to DB: " + str(img_db_response.status_code))
 
+            self._loop_rate.sleep()
+
+            for c in characters:
+                c_payload = {"image_id": image_id, "character": c}
+                char_response = requests.put(URI + 'api/character', json=c_payload)
+                self.get_logger().info("Adding character to DB: " + str(char_response.status_code))
 
 def main(args=None):
     rclpy.init(args=args)

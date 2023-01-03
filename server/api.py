@@ -63,7 +63,7 @@ class ImagesRes(Resource):
         # all images
         query_result = Image.query.all()
         # map
-        images = [{"id": i.id, "machine-t": i.ocr_result_machine_translated, "characters": [{"character_id": c.id} for c in i.characters]} for i in query_result]
+        images = [{"id": i.id, "text": i.ocr_result, "machine-text": i.ocr_result_machine_translated, "characters": [{"character_id": c.id} for c in i.characters]} for i in query_result]
         return {"images": images}, 200
 
 class ImageRes(Resource):
@@ -75,7 +75,7 @@ class ImageRes(Resource):
             return "Not Found", 404
 
         query_result = Image.query.get(image_id)
-        return {"id": query_result.id, "machine-t": query_result.ocr_result_machine_translated, "characters": [{"character_id": c.id} for c in query_result.characters]}
+        return {"id": query_result.id, "text": query_result.ocr_result, "machine-text": query_result.ocr_result_machine_translated, "characters": [{"character_id": c.id} for c in query_result.characters]}
         
 
     def put(self):

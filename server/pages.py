@@ -1,5 +1,7 @@
-from flask import Flask, render_template
-from server.models import db, Character
+from flask import Flask, render_template, request
+import requests
+import json
+from server.models import db
 from uuid import uuid4
 
 def init_pages(app):
@@ -9,11 +11,23 @@ def init_pages(app):
 
     @app.route("/images")
     def images():
-        return render_template("pages/images.html", title="Images")
+        response = requests.get(request.url_root + '/api/images')
+        images = response.json()
+        return render_template("pages/images.html", title="Images", images=images['images'])
 
-    @app.route("/kanji")
+    @app.route("/image")
+    def image():
+        return "To Implement"
+
+    @app.route("/characters")
     def kanji():
-        return render_template("pages/kanji.html", title="Kanji")
+        response = requests.get(request.url_root + '/api/characters')
+        characters = response.json()
+        return render_template("pages/kanji.html", title="Characters", characters=characters['characters'])
+
+    @app.route("/character")
+    def character():
+        return "To Implement"
 
     @app.route("/createdb")
     def create_db():

@@ -4,4 +4,12 @@
 
 <a href="{{ url_for('index') }}">Back</a>
 
+<div class="container">
+    {% for character in characters %}
+    <div class="character">
+        <a href="{{url_for('character', id=character.id)}}">{{character.character}}</a>
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}
