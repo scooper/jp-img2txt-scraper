@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'cam_data = img2txt.camera_data:main',
             'image_process = img2txt.image_process:main',
+            'data_sender = img2txt.data_sender:main'
         ],
     },
 )

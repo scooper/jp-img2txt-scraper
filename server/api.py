@@ -4,12 +4,24 @@ import os
 from server.models import Image
 from server.models import Character
 
+class CharacterResource(Resource):
+    def get(self):
+        # all characters
+        return
+
+    def put(self):
+        # receive character and image reference, 
+        return
+
 class ImageResource(Resource):
     def get(self, image_id):
-        ()
+        if image_id == None or image_id == "":
+            # get all
+            return
+        return
 
-    def put(self, image_id):
-        ()
+    def put(self):
+        return
     
 
 def init_api(app):
@@ -19,7 +31,7 @@ def init_api(app):
         if request.method == "POST":
             if "file" not in request.files:
                 return "No File Submitted\n"
-            id = request.form["id"]
+            #id = request.form["id"]
             file = request.files["file"]
             if file.filename == "":
                 return "Filename Empty\n"
@@ -29,4 +41,5 @@ def init_api(app):
 
 
     api = Api(app)
-    api.add_resource(ImageResource, "/image/<string:image_id>")
+    api.add_resource(ImageResource, "/api/images/<string:image_id>")
+    api.add_resource(CharacterResource, "/api/characters")

@@ -59,4 +59,4 @@ CATKIN_IGNORE
 # python
 __pycache__/
 
-upload/*
+server/upload/*.jpg
