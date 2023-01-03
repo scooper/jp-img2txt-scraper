@@ -8,7 +8,7 @@ from server.models import db
 def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///server.db?charset=utf8"
-    app.config["UPLOAD_FOLDER"] = "/upload"
+    app.config["UPLOAD_FOLDER"] = "/static/upload"
     app.secret_key = 'big secret!!!'
 
     db.init_app(app)

@@ -5,11 +5,6 @@ from custom_msg.msg import ImageMetadata
 from cv_bridge import CvBridge
 from pytesseract import image_to_string
 import cv2
-import re
-
-# regular expressions ranges
-kanji = r'[㐀-䶵一-鿋豈-頻]'
-radicals = r'[⺀-⿕]'
 
 from img2txt.blur_detection import is_image_blurred
 
@@ -40,7 +35,6 @@ class ImageProcessor(Node):
         result = image_to_string(adaptive_thresh, 'jpn')
         # remove whitespace and filter for kanji
         result = ''.join(result.split())
-        result = ''.join(re.findall('(' + kanji + '|' + radicals + ')', result))
 
         if result == '':
             return

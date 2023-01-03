@@ -6,9 +6,14 @@ import requests
 import uuid
 from cv_bridge import CvBridge
 import cv2
+import re
 
 # localhost for now
 URI = "http://127.0.0.1:8000/"
+
+# regular expressions ranges
+kanji = r'[㐀-䶵一-鿋豈-頻]'
+radicals = r'[⺀-⿕]'
 
 class ImageSender(Node):
     def __init__(self):
@@ -18,14 +23,26 @@ class ImageSender(Node):
             self.listener_callback,
             50)
         self.bridge = CvBridge()
+        self.timer = self.create_rate(0.5)
     
     def listener_callback(self, data):
         cv_image = self.bridge.imgmsg_to_cv2(data.image)
         image_file = cv2.imencode('.jpg', cv_image)[1]
         
+        image_id = str(uuid.uuid4())
+
         ocr_txt = data.ocr_txt
-        file_to_send = {"file":(str(uuid.uuid4()) + '.jpg', image_file)}
-        response = requests.post(URI + "upload-image", files=file_to_send)
+        characters = re.findall('(' + kanji + '|' + radicals + ')', data.ocr_txt)
+
+        file_to_send = {"file":(image_id + '.jpg', image_file)}
+        _ = requests.post(URI + "upload-image", files=file_to_send)
+        _ = requests.put(URI + 'api/image', {""})
+
+        for c in characters:
+            _ = requests.put(URI + 'api/character', {"image_id": image_id, "character": c})
+            self.timer.sleep()
+            
+
 
 
 def main(args=None):

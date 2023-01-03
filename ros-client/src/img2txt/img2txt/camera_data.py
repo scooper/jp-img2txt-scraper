@@ -8,7 +8,7 @@ class CameraData(Node):
     def __init__(self):
         super().__init__('cam_data')
         self.publisher_ = self.create_publisher(Image, 'cam_data', 1)
-        timer_period = 1  # seconds
+        timer_period = 5  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.cap = cv2.VideoCapture(0)
         self.bridge = CvBridge()

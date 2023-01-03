@@ -10,25 +10,25 @@ Base = declarative_base(metadata=metadata)
 
 association_table = db.Table(
     "img_char_association",
-    Base.metadata,
-    db.Column("img_id", db.ForeignKey("images.id"), primary_key=True),
-    db.Column("char_id", db.ForeignKey("characters.id"), primary_key=True)
+    db.Column("char_id", db.ForeignKey("characters.id"), primary_key=True),
+    db.Column("img_id", db.ForeignKey("images.id"), primary_key=True)
 )
 
-class Image(Base):
+class Image(db.Model):
     __tablename__ = "images"
     id = db.Column(db.String, primary_key=True)
     filepath = db.Column(db.String)
     ocr_result = db.Column(db.String)
     ocr_result_machine_translated = db.Column(db.String)
-    terms = db.relationship("Character", secondary=association_table, backref="characters")
-    time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    characters = db.relationship("Character", secondary=association_table, back_populates="images")
+    time_created = db.Column(db.DateTime(timezone=True), default=func.now())
     time_updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-class Character(Base):
+class Character(db.Model):
     __tablename__ = "characters"
     id = db.Column(db.String, primary_key=True)
     character = db.Column(db.String)
     jisho_link = db.Column(db.String)
-    time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    images = db.relationship("Image", secondary=association_table, back_populates="characters")
+    time_created = db.Column(db.DateTime(timezone=True), default=func.now())
     time_updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
