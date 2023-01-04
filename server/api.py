@@ -21,8 +21,7 @@ class CharactersRes(Resource):
 
 class CharacterRes(Resource):
     def get(self):
-        args = parser.parse_args()
-        character_id = args['character_id']
+        character_id = request.args['character_id']
 
         if character_id is None or character_id == "":
             return "Not Found", 404
@@ -63,19 +62,19 @@ class ImagesRes(Resource):
         # all images
         query_result = Image.query.all()
         # map
-        images = [{"id": i.id, "text": i.ocr_result, "machine-text": i.ocr_result_machine_translated, "characters": [{"character_id": c.id} for c in i.characters]} for i in query_result]
+        images = [{"id": i.id, "text": i.ocr_result, "machine_text": i.ocr_result_machine_translated, "characters": [{"character_id": c.id} for c in i.characters]} for i in query_result]
         return {"images": images}, 200
 
 class ImageRes(Resource):
     def get(self):
-        args = parser.parse_args()
-        image_id = args['image_id']
+        image_id = request.args['image_id']
 
         if image_id is None or image_id == "":
             return "Not Found", 404
 
         query_result = Image.query.get(image_id)
-        return {"id": query_result.id, "text": query_result.ocr_result, "machine-text": query_result.ocr_result_machine_translated, "characters": [{"character_id": c.id} for c in query_result.characters]}
+        payload = {"id": query_result.id, "text": query_result.ocr_result, "machine_text": query_result.ocr_result_machine_translated, "characters": [{"character_id": c.id, "character": c.character} for c in query_result.characters]}
+        return {"image": payload}, 200
         
 
     def put(self):

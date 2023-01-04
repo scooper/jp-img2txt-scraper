@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{{ url_for('index') }}">Home</a>
+<a href="{{ url_for('images') }}">Images</a>
+
+<div>
+    <img src="{{url_for('static', filename='upload/'+image.id+'.jpg')}}" alt="{{image.text}}">
+    <div>{{image.txt}}</div>
+    <a target="_blank" href="{{image.machine_text}}">Link to Translation</a>
+    <div>
+        {% for c in image.characters %}
+            <span>[{{c.character}}]&nbsp;</span>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

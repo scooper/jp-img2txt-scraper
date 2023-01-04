@@ -28,7 +28,7 @@ class ImageProcessor(Node):
         if blurred:
             return
 
-        gaussian_blur = cv2.GaussianBlur(image_greyscale,(5,5),0)
+        gaussian_blur = cv2.GaussianBlur(image_greyscale,(3,3),0)
         adaptive_thresh = cv2.adaptiveThreshold(gaussian_blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 
         # perform OCR
